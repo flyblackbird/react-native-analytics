@@ -9,17 +9,19 @@
 #import "RCTConvert.h"
 #import "SEGAnalytics.h"
 #import "RNSegmentIOAnalytics.h"
+#import <Segment-Facebook-App-Events/SEGFacebookAppEventsIntegrationFactory.h>
+
 
 @implementation RNSegmentIOAnalytics
 
 RCT_EXPORT_MODULE()
 
-RCT_EXPORT_METHOD(setup:(NSString*)configKey :(NSUInteger)flushAt :(BOOL)shouldTrackApplicationLifecycleEvents)
-{
+RCT_EXPORT_METHOD(setup:(NSString*)configKey :(NSUInteger)flushAt :(BOOL)shouldTrackApplicationLifecycleEvents) {
     SEGAnalyticsConfiguration *configuration = [SEGAnalyticsConfiguration configurationWithWriteKey:configKey];
     configuration.flushAt = flushAt;
     configuration.shouldUseLocationServices = true;
     configuration.trackApplicationLifecycleEvents = shouldTrackApplicationLifecycleEvents;
+    [configuration use:[SEGFacebookAppEventsIntegrationFactory instance]];
     [SEGAnalytics setupWithConfiguration:configuration];
 }
 
